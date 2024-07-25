@@ -1,0 +1,4 @@
+// src/actions/actionTypes.js
+export const CREATE_TASK_REQUEST = 'CREATE_TASK_REQUEST';
+export const CREATE_TASK_SUCCESS = 'CREATE_TASK_SUCCESS';
+export const CREATE_TASK_FAILURE = 'CREATE_TASK_FAILURE';
