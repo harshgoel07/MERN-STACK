@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Typography, Button, Dialog, DialogActions, DialogContent } from '@mui/material';
+import { Container, Typography, Button, Dialog, DialogContent } from '@mui/material';
 import ProjectForm from './ProjectForm';
 import ProjectList from './ProjectList';
 import SnackbarAlert from './SnackbarAlert';
@@ -8,7 +8,6 @@ import SnackbarAlert from './SnackbarAlert';
 const ProjectPage = () => {
     const [projects, setProjects] = useState([]);
     const [selectedProject, setSelectedProject] = useState(null);
-    const [error, setError] = useState(null);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -22,7 +21,6 @@ const ProjectPage = () => {
             setProjects(response.data);
         } catch (error) {
             console.error('Error fetching projects', error);
-            setError('Error fetching projects');
         }
     };
 
@@ -46,7 +44,7 @@ const ProjectPage = () => {
             setSelectedProject(null);
             setSnackbarOpen(true);
             setDialogOpen(false);
-            fetchProjects(); // Fetch updated projects
+            fetchProjects();
         } catch (error) {
             console.error('Error updating project', error);
             setSnackbarOpen(true);
@@ -57,12 +55,9 @@ const ProjectPage = () => {
         try {
             await axios.delete(`/api/projects/${projectId}`);
             setProjects(projects.filter(project => project.project_id !== projectId));
-            // Delete all tasks associated with this project
             await axios.delete(`/api/tasks/project/${projectId}`);
-            // Delete from the userDetails API (remove project from all users and tasks)
-            await axios.delete(`/api/userDetails/project/${projectId}`);
             setSnackbarOpen(true);
-            fetchProjects(); // Fetch updated projects
+            fetchProjects();
         } catch (error) {
             console.error('Error deleting project', error);
             window.location.reload();
@@ -92,40 +87,33 @@ const ProjectPage = () => {
             <Typography variant="h4" gutterBottom>
                 Project Manager
             </Typography>
-            {error && <Typography color="error">{error}</Typography>}
-            <Button 
-                variant="contained" 
-                color="primary" 
+            <Button
+                className="button-custom"
+                variant="contained"
                 onClick={handleOpenDialog}
-                style={{ marginBottom: '20px' }}
-            >
+                sx={{ color: 'black' }}>
                 Create Project
             </Button>
-            <ProjectList 
-                projects={projects} 
-                onEdit={handleSelectProject} 
-                onDelete={handleDeleteProject} 
+            <ProjectList
+                projects={projects}
+                onEdit={handleSelectProject}
+                onDelete={handleDeleteProject}
             />
             <Dialog open={dialogOpen} onClose={handleCloseDialog}>
                 <DialogContent>
-                    <ProjectForm 
-                        selectedProject={selectedProject} 
-                        onCreate={handleCreateProject} 
-                        onUpdate={handleUpdateProject} 
-                        onCancel={handleCloseDialog} 
-                        fetchProjects={fetchProjects} // Pass fetchProjects function
+                    <ProjectForm
+                        selectedProject={selectedProject}
+                        onCreate={handleCreateProject}
+                        onUpdate={handleUpdateProject}
+                        onCancel={handleCloseDialog}
+                        fetchProjects={fetchProjects}
                     />
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDialog} color="primary">
-                        Close
-                    </Button>
-                </DialogActions>
             </Dialog>
-            <SnackbarAlert 
-                open={snackbarOpen} 
-                onClose={handleCloseSnackbar} 
-                message="Action completed successfully!" 
+            <SnackbarAlert
+                open={snackbarOpen}
+                onClose={handleCloseSnackbar}
+                message="Action completed successfully!"
             />
         </Container>
     );

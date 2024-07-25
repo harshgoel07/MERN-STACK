@@ -64,15 +64,15 @@ const ProjectForm = ({ selectedProject, onCreate, onUpdate, onCancel, fetchProje
                     // Transfer project data from old owner to new owner
                     await axios.put(`/api/userDetails/transfer/${previousOwnerId}/${ownerId}/${selectedProject.project_id}`);
                     toast.success('Project data transferred from the old owner to the new owner successfully!');
-                    
+
                     // Update owner_id for the selected project
                     await axios.put(`/api/projects/updateOwner/${selectedProject.project_id}/${ownerId}`);
                     toast.success('Owner ID updated for the project successfully!');
-                    
+
                     // Update owner_id for tasks in the new owner's project
                     const tasksResponse = await axios.get(`/api/tasks?project_id=${selectedProject.project_id}`);
                     const tasks = tasksResponse.data;
-                    
+
                     await Promise.all(tasks.map(task =>
                         axios.put(`/api/tasks/${task.task_id}`, {
                             task_description: task.task_description,
@@ -156,16 +156,17 @@ const ProjectForm = ({ selectedProject, onCreate, onUpdate, onCancel, fetchProje
                     ))}
                 </Select>
             </FormControl>
-            <Button 
-                variant="contained" 
-                color="primary" 
+            <Button
+                variant="contained"
+                className="button-custom"
                 onClick={handleSubmit}
             >
                 {selectedProject ? 'Update Project' : 'Create Project'}
             </Button>
-            <Button 
-                variant="contained" 
-                color="secondary" 
+            <Button
+                variant="outlined"
+                color="error"
+                // className="button-custom"
                 onClick={onCancel}
                 style={{ marginLeft: '10px' }}
             >

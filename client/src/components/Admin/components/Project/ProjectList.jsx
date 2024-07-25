@@ -54,8 +54,8 @@ const ProjectList = ({ projects, setProjects, onEdit, onDelete }) => {
                     {projects.map(project => (
                         <motion.tr
                             key={project.project_id}
-                            initial={{ opacity: 0, x: -100 }}
-                            animate={{ opacity: 1, x: 0 }}
+                            initial={{ opacity: 0, y: -40 }}
+                            animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                         >
                             <TableCell style={{ textAlign: 'center' }}>
@@ -72,15 +72,15 @@ const ProjectList = ({ projects, setProjects, onEdit, onDelete }) => {
                             </TableCell>
                             <TableCell style={{ textAlign: 'center' }}>{getUserName(project.owner_id)}</TableCell>
                             <TableCell style={{ textAlign: 'center' }}>
-                                <IconButton 
-                                    color="primary" 
+                                <IconButton
+                                    sx={{ color: '#FF9E2C' }}
                                     onClick={() => onEdit(project)}
                                     size="small"
                                 >
                                     <EditIcon />
                                 </IconButton>
-                                <IconButton 
-                                    color="secondary" 
+                                <IconButton
+                                    sx={{ color: '#d25d5d' }}
                                     onClick={() => onDelete(project.project_id)}
                                     size="small"
                                 >

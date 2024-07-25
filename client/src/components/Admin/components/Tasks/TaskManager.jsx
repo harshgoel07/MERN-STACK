@@ -1,15 +1,16 @@
-// src/components/TaskManager.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import TaskList from './TaskList';
-import { Container, Typography, Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, TableContainer } from '@mui/material';
+import { Container, Typography, Button, Dialog, DialogContent } from '@mui/material';
 import EditTask from './EditTasks';
 import CreateTask from './CreateTasks';
+import SnackbarAlert from './SnackbarAlert';
 
 const TaskManager = () => {
     const [tasks, setTasks] = useState([]);
     const [selectedTask, setSelectedTask] = useState(null);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     useEffect(() => {
         fetchTasks();
@@ -27,10 +28,12 @@ const TaskManager = () => {
 
     const handleSave = async () => {
         fetchTasks();
+        setSnackbarOpen(true);
     };
 
     const handleEdit = (task) => {
         setSelectedTask(task);
+        setSnackbarOpen(true);
         setDialogOpen(true);
     };
 
@@ -51,7 +54,7 @@ const TaskManager = () => {
             }
 
             await axios.delete(`/api/tasks/${taskId}`);
-            await axios.delete(`/api/userDetails/${ownerId}/project/${projectId}/task/${taskId}`);
+            setSnackbarOpen(true);
 
             fetchTasks();
         } catch (error) {
@@ -69,31 +72,42 @@ const TaskManager = () => {
         setDialogOpen(true);
     };
 
+    const handleCloseSnackbar = () => {
+        setSnackbarOpen(false);
+    };
+
     return (
         <Container>
             <Typography variant="h4" gutterBottom>
                 Task Manager
             </Typography>
-            <Button variant="contained" color="primary" onClick={handleOpenDialog}>
+            <Button
+                className="button-custom"
+                variant="contained"
+                onClick={handleOpenDialog}
+                sx={{ color: 'black' }}
+            >
                 Create Task
             </Button>
-            <TableContainer component={Paper} style={{ marginTop: '20px' }}>
-                <TaskList tasks={tasks} onEdit={handleEdit} onDelete={(taskId, ownerId) => handleDelete(taskId, ownerId)} />
-            </TableContainer>
+            <TaskList
+                tasks={tasks}
+                onEdit={handleEdit}
+                onDelete={(taskId, ownerId) => handleDelete(taskId, ownerId)}
+            />
             <Dialog open={dialogOpen} onClose={handleCancel}>
                 <DialogContent>
                     {selectedTask ? (
                         <EditTask task={selectedTask} onClose={handleCancel} onSave={handleSave} />
                     ) : (
-                        <CreateTask onSave={fetchTasks} />
+                        <CreateTask onSave={fetchTasks} onClose={handleCancel} />
                     )}
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCancel} color="primary">
-                        Close
-                    </Button>
-                </DialogActions>
             </Dialog>
+            <SnackbarAlert
+                open={snackbarOpen}
+                onClose={handleCloseSnackbar}
+                message="Action completed successfully!"
+            />
         </Container>
     );
 };

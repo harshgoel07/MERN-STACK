@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { List, ListItem, ListItemText, Typography, Divider, Box } from '@mui/material';
+import { List, ListItem, ListItemText, Typography, Divider, Box, Select, MenuItem } from '@mui/material';
 import { useAppSelector } from '../../services/hooks';
-import CheckIcon from '@mui/icons-material/Check';
-import ToggleButton from '@mui/material/ToggleButton';
 import axios from 'axios';
 
 const MainBar = ({ selectedProjectId }) => {
@@ -25,11 +23,9 @@ const MainBar = ({ selectedProjectId }) => {
     setShowAllTasks(true);
   };
 
-  // Function to handle toggle button click
-  const handleToggleClick = async (taskId, userId, projectId, currentStatus) => {
+  // Function to handle status change
+  const handleStatusChange = async (taskId, userId, projectId, newStatus) => {
     try {
-      const newStatus = currentStatus === 'completed' ? 'not started' : 'completed';
-
       // Send PUT request to update task status
       await axios.put(`/api/userDetails/${userId}/project/${projectId}/task/${taskId}`, {
         task_status: newStatus
@@ -60,8 +56,8 @@ const MainBar = ({ selectedProjectId }) => {
         <Typography
           variant="h5"
           onClick={handleHeaderClick}
-          style={{ cursor: 'pointer', marginBottom: '1rem', fontWeight: 'bold' }}
-          color="primary"
+          style={{ cursor: 'pointer', marginBottom: '1rem' }}
+          color="#FF9E2C"
         >
           Tasks Assigned
         </Typography>
@@ -103,23 +99,33 @@ const MainBar = ({ selectedProjectId }) => {
                                   color="textSecondary"
                                   style={{ marginRight: '0.5rem', fontSize: '0.875rem' }}
                                 >
-                                  {`Status: ${task.task_status}`}
+                                  Status:
                                 </Typography>
-                                <ToggleButton
-                                  value="check"
-                                  selected={task.task_status === 'completed'}
-                                  onChange={() => {
-                                    handleToggleClick(task.task_id, task.owner_id, task.project_id, task.task_status);
-                                  }}
-                                  style={{
-                                    backgroundColor: task.task_status === 'completed' ? '#4caf50' : '#e0e0e0',
-                                    color: task.task_status === 'completed' ? '#fff' : '#000',
-                                    transition: 'background-color 0.3s, color 0.3s',
-                                    marginRight: '1rem'
+                                <Select
+                                  value={task.task_status}
+                                  onChange={(e) => handleStatusChange(task.task_id, task.owner_id, task.project_id, e.target.value)}
+                                  sx={{
+                                    fontSize: '0.875rem',
+                                    height: '1.5rem',
+                                    minWidth: '100px',
+                                    marginRight: '1rem',
+                                    '& .MuiOutlinedInput-notchedOutline': {
+                                      borderColor: '#FFB347'
+                                    },
+                                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                                      borderColor: '#FFB347'
+                                    },
+                                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                      borderColor: '#FF9E2C'
+                                    }
                                   }}
                                 >
-                                  <CheckIcon />
-                                </ToggleButton>
+                                  <MenuItem value="new" sx={{ fontSize: '0.875rem', height: '1.5rem' }}>new</MenuItem>
+                                  <MenuItem value="not started" sx={{ fontSize: '0.875rem', height: '1.5rem' }}>Not Started</MenuItem>
+                                  <MenuItem value="in-progress" sx={{ fontSize: '0.875rem', height: '1.5rem' }}>In Progress</MenuItem>
+                                  <MenuItem value="completed" sx={{ fontSize: '0.875rem', height: '1.5rem' }}>Completed</MenuItem>
+                                  <MenuItem value="blocked" sx={{ fontSize: '0.875rem', height: '1.5rem' }}>Blocked</MenuItem>
+                                </Select>
                               </Box>
                               <Typography variant="body2" color="textSecondary">
                                 {`Due Date: ${new Date(task.task_dueDate).toLocaleDateString()}`}
@@ -130,7 +136,7 @@ const MainBar = ({ selectedProjectId }) => {
                       </Box>
                     </Box>
                   </ListItem>
-                  <Divider />
+                  <Divider style={{ margin: '.5rem 0' }} />
                 </motion.div>
               ))
             ) : (

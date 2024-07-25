@@ -35,23 +35,22 @@ const CreateTask = () => {
     e.preventDefault();
 
     try {
-        // Create the task
+      // Create the task
       await axios.post('/api/tasks', {
-            task_description: taskDescription,
-            task_dueDate: taskDueDate,
-            task_status: taskStatus,
-            owner_id: ownerId,
-            project_id: projectId,
-        });
-        toast.success(`Task created successfully`);
-        window.location.reload()
-      
-    } catch (error) {
-        console.error('Error creating or updating task:', error);
-        toast.error('Error creating or updating task. Please try again.');
-    }
-};
+        task_description: taskDescription,
+        task_dueDate: taskDueDate,
+        task_status: taskStatus,
+        owner_id: ownerId,
+        project_id: projectId,
+      });
+      toast.success(`Task created successfully`);
+      window.location.reload()
 
+    } catch (error) {
+      console.error('Error creating or updating task:', error);
+      toast.error('Error creating or updating task. Please try again.');
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -122,10 +121,19 @@ const CreateTask = () => {
           ))}
         </Select>
       </FormControl>
-      <Button type="submit" variant="contained" color="primary">
+      <Button
+        className="button-custom"
+        type="submit"
+        variant="contained"
+      >
         Save
       </Button>
-      <Button variant="outlined" color="secondary" style={{ marginLeft: '10px' }}>
+      <Button
+        // className="button-custom"
+        variant="outlined"
+        color="error"
+        style={{ marginLeft: '10px' }}
+      >
         Cancel
       </Button>
     </form>

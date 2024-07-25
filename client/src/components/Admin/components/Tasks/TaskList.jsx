@@ -64,8 +64,8 @@ const TaskList = ({ tasks, onEdit, onDelete }) => {
                     {tasks.map((task) => (
                         <motion.tr
                             key={task.task_id}
-                            initial={{ opacity: 0, x: -100 }}
-                            animate={{ opacity: 1, x: 0 }}
+                            initial={{ opacity: 0, y: -40 }}
+                            animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                         >
                             <TableCell style={{ textAlign: 'center' }}>
@@ -81,14 +81,14 @@ const TaskList = ({ tasks, onEdit, onDelete }) => {
                             <TableCell style={{ textAlign: 'center' }}>{getProjectName(task.project_id)}</TableCell>
                             <TableCell style={{ textAlign: 'center' }}>
                                 <IconButton
-                                    color="primary"
+                                    sx={{ color: '#FF9E2C' }}
                                     onClick={() => onEdit(task)}
                                     size="small"
                                 >
                                     <Edit />
                                 </IconButton>
                                 <IconButton
-                                    color="secondary"
+                                    sx={{ color: '#d25d5d' }}
                                     onClick={() => onDelete(task.task_id, task.owner_id)}
                                     size="small"
                                 >

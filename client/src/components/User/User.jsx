@@ -5,9 +5,11 @@ import { fetchUserProjects, fetchUserTasks } from '../../actions/UserProjectActi
 import LeftSideBar from './leftsidebar';
 import MainBar from './mainbar';
 import { Grid, Paper, AppBar, Toolbar, Box, CssBaseline, Typography, Button } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useAppSelector } from '../../services/hooks';
 import { fetchUserDetails } from '../../store/userDetailsSlice';
 import { logoutUser } from '../../actions/authAction';
+import { styled } from '@mui/system';
 
 const User = () => {
   const dispatch = useDispatch();
@@ -39,17 +41,25 @@ const User = () => {
     navigate('/');
   };
 
+  const Logo = styled('img')({
+    height: 55,
+  });
+
   const { userDetails } = useAppSelector((state) => state.userDetails);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <CssBaseline />
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: '#FFB347' }}>
         <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          <Logo
+            sx={{ display: 'flex', alignItems: 'center', marginRight: 3 }}
+            src="https://www.tigeranalytics.com/wp-content/uploads/2023/09/TA-Logo-resized-for-website_.png"
+            alt="Tiger Analytics Logo" />
+          <Typography variant="h6" sx={{ flexGrow: 1, color: 'black' }}>
             {userDetails?.user_name ? `${userDetails.user_name}'s Dashboard` : 'User Dashboard'}
           </Typography>
-          <Button color="inherit" onClick={handleLogout}>
+          <Button color="inherit" onClick={handleLogout} startIcon={<LogoutIcon />} sx={{ color: 'black' }}>
             Logout
           </Button>
         </Toolbar>

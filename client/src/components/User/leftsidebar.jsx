@@ -9,18 +9,20 @@ const LeftSideBar = ({ onSelectProject }) => {
   return (
     <div>
       <motion.div
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-      <Typography variant="h5">Projects</Typography>
-      <List>
-        {projects.map(project => (
-          <ListItem button key={project.project_id} onClick={() => onSelectProject(project.project_id)}>
-            <ListItemText primary={project.project_name} />
-          </ListItem>
-        ))}
-      </List>
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Typography variant="h5" style={{ color: '#FF9E2C' }}>
+          Projects
+        </Typography>
+        <List>
+          {projects.map(project => (
+            <ListItem button key={project.project_id} onClick={() => onSelectProject(project.project_id)}>
+              <ListItemText primary={project.project_name} />
+            </ListItem>
+          ))}
+        </List>
       </motion.div>
     </div>
   );

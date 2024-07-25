@@ -17,7 +17,7 @@ const taskSchema = new mongoose.Schema({
   task_status: {
     type: String,
     enum: ['new', 'in-progress', 'blocked', 'completed', 'not started'],
-    default: 'not started'
+    default: 'new'
   },
   owner_id: {
     type: Number,
