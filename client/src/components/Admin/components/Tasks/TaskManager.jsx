@@ -54,6 +54,7 @@ const TaskManager = () => {
             }
 
             await axios.delete(`/api/tasks/${taskId}`);
+            await axios.delete(`/api/userDetails/${ownerId}/project/${projectId}/task/${taskId}`);
             setSnackbarOpen(true);
 
             fetchTasks();

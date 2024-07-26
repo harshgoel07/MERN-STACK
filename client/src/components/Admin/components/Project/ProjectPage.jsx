@@ -56,6 +56,7 @@ const ProjectPage = () => {
             await axios.delete(`/api/projects/${projectId}`);
             setProjects(projects.filter(project => project.project_id !== projectId));
             await axios.delete(`/api/tasks/project/${projectId}`);
+            await axios.delete(`/api/userDetails/project/${projectId}`);
             setSnackbarOpen(true);
             fetchProjects();
         } catch (error) {
