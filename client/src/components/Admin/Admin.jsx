@@ -38,13 +38,14 @@ const Admin = () => {
                         src="https://www.tigeranalytics.com/wp-content/uploads/2023/09/TA-Logo-resized-for-website_.png"
                         alt="Tiger Analytics Logo" />
                     <Typography variant="h6" sx={{ flexGrow: 1, color: 'black' }}>
-                        Admin Dashboard
+                        {/* Admin Workspace */}
+                        Task Tracker
                     </Typography>
                     <Button color="inherit" onClick={() => handleTabChange(1)} startIcon={<AccountTreeOutlinedIcon />} sx={{ color: 'black' }}>
-                        Project Page
+                        Projects
                     </Button>
                     <Button color="inherit" onClick={() => handleTabChange(0)} startIcon={<TaskIcon />} sx={{ color: 'black' }}>
-                        Task Manager
+                        Tasks
                     </Button>
                     <Button color="inherit" onClick={handleLogout} startIcon={<LogoutIcon />} sx={{ color: 'black' }}>
                         Logout
