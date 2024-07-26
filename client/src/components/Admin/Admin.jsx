@@ -1,21 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppBar, Box, Button, CssBaseline, Paper, Toolbar, Typography, IconButton, Menu, MenuItem, Divider } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import TaskManager from "./components/Tasks/TaskManager";
-import ProjectPage from "./components/Project/ProjectPage";
+import TaskManager from './components/Tasks/TaskManager';
+import ProjectPage from './components/Project/ProjectPage';
 import { logoutUser } from '../../actions/authAction';
 import TaskIcon from '@mui/icons-material/TaskOutlined';
 import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined';
 import { styled } from '@mui/material/styles';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
+import { fetchUserDetails } from '../../store/userDetailsSlice'; // Ensure this is correctly imported
+import { useAppSelector } from '../../services/hooks';
 
 const Admin = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { user } = useAppSelector((state) => state.user);
+    const userId = user?.user_id;
+
     const [selectedTab, setSelectedTab] = useState(0); // State to track the selected tab
     const [anchorEl, setAnchorEl] = useState(null); // State to manage Profile Menu
+
+    useEffect(() => {
+        if (userId) {
+            dispatch(fetchUserDetails(userId)); // Fetch user details by user_id
+        }
+    }, [userId, dispatch]);
 
     const handleLogout = () => {
         dispatch(logoutUser());
@@ -38,11 +49,7 @@ const Admin = () => {
         height: 55,
     });
 
-    const user = {
-        user_name: "Himanshu",
-        email: "him@gmail.com",
-        role: "admin"
-    };
+    const { userDetails } = useAppSelector((state) => state.userDetails);
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
@@ -77,13 +84,13 @@ const Admin = () => {
                         </MenuItem>
                         <Divider />
                         <MenuItem>
-                            <Typography variant="body1">Name: {user.user_name}</Typography>
+                            <Typography variant="body1">Name: {userDetails?.user_name}</Typography>
                         </MenuItem>
                         <MenuItem>
-                            <Typography variant="body1">Email: {user.email}</Typography>
+                            <Typography variant="body1">Email: {userDetails?.email}</Typography>
                         </MenuItem>
                         <MenuItem>
-                            <Typography variant="body1">Role: {user.role}</Typography>
+                            <Typography variant="body1">Role: {userDetails?.role}</Typography>
                         </MenuItem>
                     </Menu>
                     <IconButton color="inherit" onClick={handleLogout} sx={{ color: 'black' }}>
